@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Static Website</title>
+
+    <!-- Internal CSS -->
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f8;
+        }
+
+        header {
+            background-color: #0a58ca;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #ffffff;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #0a58ca;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #084298;
+        }
+
+        main {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 20px auto;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            background-color: #0a58ca;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Welcome to My Website 🌐</h1>
+        <p>Simple Static Website using HTML & CSS</p>
+    </header>
+
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+    </nav>
+
+    <main>
+        <div class="card">
+            <h2>Hello 👋</h2>
+            <p>
+                This is a simple static website built with 
+                <strong>HTML</strong> and <strong>CSS</strong>.
+            </p>
+            <p>
+                You can host this on <b>AWS S3</b>, <b>EC2</b>, or any web server.
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        © 2026 MyWebsite | Built with ❤️
+    </footer>
+
+</body>
+</html>

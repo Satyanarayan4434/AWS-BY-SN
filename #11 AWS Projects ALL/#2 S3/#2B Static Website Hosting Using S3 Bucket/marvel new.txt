@@ -1,0 +1,206 @@
+#!/bin/bash
+set -e
+
+# Install Apache
+if command -v dnf >/dev/null 2>&1; then
+  dnf install -y httpd
+else
+  yum install -y httpd
+fi
+
+systemctl start httpd
+systemctl enable httpd
+
+# IMDSv2 Token
+TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" \
+  -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" -s)
+
+INSTANCE_ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" \
+  http://169.254.169.254/latest/meta-data/instance-id)
+
+AZ=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" \
+  http://169.254.169.254/latest/meta-data/placement/availability-zone)
+
+REGION=$(echo $AZ | sed 's/[a-z]$//')
+PUBLIC_IP=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" \
+  http://169.254.169.254/latest/meta-data/public-ipv4)
+
+HOSTNAME=$(hostname)
+
+cat <<EOF > /var/www/html/index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cinematic Cloud Dashboard</title>
+<style>
+body {
+  margin:0;
+  font-family:Segoe UI, sans-serif;
+  background:radial-gradient(circle,#020617,#000);
+  color:#e5e7eb;
+  transition:background 2s;
+}
+header {
+  padding:35px;
+  text-align:center;
+  font-size:38px;
+  letter-spacing:3px;
+  background:linear-gradient(to right,#7f1d1d,#991b1b);
+}
+.info {
+  max-width:900px;
+  margin:30px auto;
+  padding:25px;
+  background:#020617;
+  border-radius:18px;
+  box-shadow:0 0 40px rgba(239,68,68,0.4);
+}
+.info div { margin:10px 0; font-size:17px; }
+
+.controls {
+  text-align:center;
+  margin:25px;
+}
+button {
+  margin:8px;
+  padding:12px 26px;
+  border:none;
+  border-radius:30px;
+  font-size:15px;
+  cursor:pointer;
+  color:white;
+}
+#snap { background:linear-gradient(to right,#7c3aed,#4c1d95); }
+#statsBtn { background:linear-gradient(to right,#0284c7,#0369a1); }
+
+#stats {
+  display:none;
+  text-align:center;
+  margin-top:15px;
+  color:#38bdf8;
+}
+
+.heroes {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:22px;
+  padding:35px;
+  max-width:1200px;
+  margin:auto;
+}
+.card {
+  background:linear-gradient(145deg,#020617,#111827);
+  border-radius:16px;
+  padding:22px;
+  text-align:center;
+  box-shadow:0 0 25px rgba(56,189,248,0.15);
+  transition:0.4s;
+  cursor:pointer;
+}
+.card:hover {
+  transform:translateY(-10px) scale(1.04);
+  box-shadow:0 0 45px rgba(239,68,68,0.6);
+}
+.card.active {
+  box-shadow:0 0 70px rgba(34,197,94,0.8);
+}
+.card h2 { color:#facc15; margin-bottom:8px; }
+.power {
+  display:none;
+  margin-top:10px;
+  font-size:14px;
+  color:#38bdf8;
+}
+
+footer {
+  text-align:center;
+  padding:20px;
+  color:#9ca3af;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>🦸 CINEMATIC CLOUD DASHBOARD 🦸</header>
+
+<div class="info">
+  <div>🖥️ Hostname: <b>$HOSTNAME</b></div>
+  <div>🆔 Instance ID: <b>$INSTANCE_ID</b></div>
+  <div>📍 Availability Zone: <b>$AZ</b></div>
+  <div>🌍 Region: <b>$REGION</b></div>
+  <div>🌐 Public IP: <b>$PUBLIC_IP</b></div>
+  <div>⚙️ Status: <span style="color:#22c55e;font-weight:bold;">Running</span></div>
+</div>
+
+<div class="controls">
+  <button id="snap">🧤 Infinity Snap</button>
+  <button id="statsBtn">📊 Toggle Server Stats</button>
+
+  <div id="stats">
+    CPU Usage: 34% <br>
+    Memory Usage: 62% <br>
+    Disk Usage: 41%
+  </div>
+</div>
+
+<section class="heroes">
+  <div class="card"><h2>Iron Man</h2><p>Innovation</p><div class="power">⚡ Arc Reactor Online</div></div>
+  <div class="card"><h2>Captain America</h2><p>Security</p><div class="power">🛡️ Defense Maxed</div></div>
+  <div class="card"><h2>Thor</h2><p>Availability</p><div class="power">⚡ Thunder Active</div></div>
+  <div class="card"><h2>Hulk</h2><p>Compute</p><div class="power">💚 Unlimited Strength</div></div>
+  <div class="card"><h2>Spider-Man</h2><p>Networking</p><div class="power">🕸️ Fast Response</div></div>
+  <div class="card"><h2>Doctor Strange</h2><p>Automation</p><div class="power">🌀 Time Control</div></div>
+  <div class="card"><h2>Black Panther</h2><p>Advanced Tech</p><div class="power">🐾 Wakanda Mode</div></div>
+  <div class="card"><h2>Thanos</h2><p>Balance</p><div class="power">🟣 Perfect Balance</div></div>
+</section>
+
+<footer>
+AWS EC2 • DevOps Creativity • Built by You
+</footer>
+
+<script>
+// Hero click interaction
+document.querySelectorAll('.card').forEach(card=>{
+  card.onclick=()=>{
+    card.classList.toggle('active');
+    let p=card.querySelector('.power');
+    p.style.display=p.style.display==='block'?'none':'block';
+  }
+});
+
+// Infinity Snap
+document.getElementById('snap').onclick=()=>{
+  document.querySelectorAll('.card').forEach((c,i)=>{
+    if(i%2===0){
+      c.style.opacity='0';
+      c.style.transform='scale(0.1)';
+    }
+  });
+};
+
+// Stats toggle
+document.getElementById('statsBtn').onclick=()=>{
+  let s=document.getElementById('stats');
+  s.style.display=s.style.display==='block'?'none':'block';
+};
+
+// Cinematic background loop
+let bg=[
+"radial-gradient(circle,#020617,#000)",
+"radial-gradient(circle,#1e293b,#020617)",
+"radial-gradient(circle,#0f172a,#020617)"
+];
+let i=0;
+setInterval(()=>{document.body.style.background=bg[i++%bg.length];},8000);
+
+// Easter egg
+document.addEventListener("keydown",e=>{
+  if(e.key==="a") alert("🦸 Avengers Assemble!");
+});
+</script>
+
+</body>
+</html>
+EOF

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | Page Not Found</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --marvel-red: #ed1d24;
+            --marvel-black: #151515;
+            --marvel-dark: #202020;
+        }
+
+        body {
+            background-color: var(--marvel-black);
+            color: white;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        h1, h2, .marvel-font {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .marvel-logo {
+            background-color: var(--marvel-red);
+            padding: 0.2rem 0.8rem;
+            display: inline-block;
+            line-height: 1;
+            font-weight: 700;
+            letter-spacing: -2px;
+            font-size: 2.5rem;
+            color: white;
+            box-shadow: 4px 4px 0px white;
+        }
+
+        .error-card {
+            background: var(--marvel-dark);
+            border-left: 6px solid var(--marvel-red);
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen px-4">
+
+    <div class="text-center max-w-xl">
+        <!-- Logo -->
+        <div class="marvel-logo mb-6">MARVEL</div>
+
+        <!-- Error Card -->
+        <div class="error-card p-8 rounded-lg shadow-2xl">
+            <h1 class="text-7xl font-bold text-red-600 mb-4">404</h1>
+            <h2 class="text-2xl mb-4">Page Not Found</h2>
+
+            <p class="text-gray-400 mb-6">
+                Looks like this page was snapped out of existence 🫰  
+                The page you’re trying to access doesn’t exist or has been moved.
+            </p>
+
+            <a href="index.html"
+               class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded font-bold transition">
+                <i class="fa-solid fa-house"></i>
+                Back to Home
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <p class="text-gray-500 text-sm mt-8">
+            © 2024 MCU Timeline Fan Project
+        </p>
+    </div>
+
+</body>
+</html>

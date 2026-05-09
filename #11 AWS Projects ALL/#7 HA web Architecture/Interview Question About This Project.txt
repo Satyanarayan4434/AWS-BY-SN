@@ -1,0 +1,12 @@
+📝 How to Pitch This in an Interview (The "STAR" Method)
+If an interviewer asks: "Tell me about a project you've built on AWS."
+
+Answer:
+
+S (Situation): "I wanted to build a corporate-style web infrastructure that could survive a data center failure."
+
+T (Task): "I needed to design a secure, high-availability network that didn't rely on a single server."
+
+A (Action): "I architected a custom VPC with public and private subnets. I deployed EC2 instances across multiple Availability Zones behind an Application Load Balancer. I used IAM Roles for secure S3 access instead of access keys, and I automated the deployment using Bash scripts in User Data to pull the code dynamically."
+
+R (Result): "The result was a fault-tolerant system where I could terminate an active server, and the application remained 100% online with zero downtime for the user."

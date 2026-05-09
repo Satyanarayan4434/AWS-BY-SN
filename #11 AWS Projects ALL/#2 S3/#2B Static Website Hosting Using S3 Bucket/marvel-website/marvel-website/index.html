@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCU Chronological Timeline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --marvel-red: #ed1d24;
+            --marvel-black: #151515;
+            --marvel-dark: #202020;
+        }
+
+        body {
+            background-color: var(--marvel-black);
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .marvel-font {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* Marvel Logo Style */
+        .marvel-logo {
+            background-color: var(--marvel-red);
+            padding: 0.2rem 0.8rem;
+            display: inline-block;
+            line-height: 1;
+            font-weight: 700;
+            letter-spacing: -2px;
+            font-size: 3rem;
+            color: white;
+            box-shadow: 4px 4px 0px white;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--marvel-black);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--marvel-red);
+            border-radius: 4px;
+        }
+
+        /* Timeline Connector */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--marvel-red), #5e0b0e);
+            z-index: 0;
+        }
+
+        .timeline-item {
+            position: relative;
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--marvel-red);
+            border: 4px solid var(--marvel-black);
+            border-radius: 50%;
+            top: 24px;
+            box-shadow: 0 0 10px var(--marvel-red);
+        }
+
+        .movie-card {
+            background: var(--marvel-dark);
+            border-left: 4px solid var(--marvel-red);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(237, 29, 36, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .timeline-line {
+                left: 20px;
+            }
+            .timeline-dot {
+                left: 20px;
+            }
+            .movie-card-container {
+                padding-left: 50px !important;
+                width: 100% !important;
+                text-align: left !important;
+            }
+            .timeline-item:nth-child(even) .movie-card-container {
+                margin-left: 0 !important;
+            }
+        }
+
+        .phase-badge {
+            background: #333;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            vertical-align: middle;
+        }
+
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(21, 21, 21, 0.7), var(--marvel-black));
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Hero Section -->
+    <section class="relative h-96 flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?auto=format&fit=crop&q=80&w=1920'); opacity: 0.3;"></div>
+        <div class="absolute inset-0 hero-overlay z-1"></div>
+        
+        <div class="relative z-10 text-center px-4">
+            <div class="marvel-logo mb-6">MARVEL</div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-2">Cinematic Universe</h1>
+            <p class="text-xl text-gray-400 italic">The Chronological Timeline</p>
+        </div>
+    </section>
+
+    <!-- Main Timeline Content -->
+    <main class="max-w-6xl mx-auto px-4 py-20 relative">
+        <div class="timeline-line"></div>
+
+        <div id="timeline-root" class="space-y-12">
+            <!-- Timeline items will be injected here by JS -->
+        </div>
+    </main>
+
+    <footer class="bg-black py-12 text-center text-gray-500 border-t border-gray-900">
+        <div class="marvel-logo text-sm mb-4" style="font-size: 1.5rem; box-shadow: 2px 2px 0px white;">MARVEL</div>
+        <p class="mb-2">Developed by <span class="text-white font-bold tracking-wider">YASH THORA</span></p>
+        <p>&copy; 2024 MCU Timeline Fan Project. All characters and stories are property of Marvel Studios.</p>
+    </footer>
+
+    <script>
+        // MCU Chronological Data
+        const mcuData = [
+            { id: 1, title: "Captain America: The First Avenger", year: "1942-1945", phase: 1, desc: "Steve Rogers becomes a super soldier during WWII.", icon: "shield-halved" },
+            { id: 2, title: "Captain Marvel", year: "1995", phase: 3, desc: "Vers discovers her true identity as Carol Danvers on Earth.", icon: "bolt" },
+            { id: 3, title: "Iron Man", year: "2010", phase: 1, desc: "Tony Stark builds a suit of armor to escape captivity.", icon: "rocket" },
+            { id: 4, title: "Iron Man 2", year: "2011", phase: 1, desc: "Tony faces health issues and a vengeful Russian physicist.", icon: "battery-full" },
+            { id: 5, title: "The Incredible Hulk", year: "2011", phase: 1, desc: "Bruce Banner flees the military while searching for a cure.", icon: "biohazard" },
+            { id: 6, title: "Thor", year: "2011", phase: 1, desc: "The God of Thunder is banished to Earth after defying his father.", icon: "hammer" },
+            { id: 7, title: "The Avengers", year: "2012", phase: 1, desc: "Earth's Mightiest Heroes unite to stop Loki's invasion.", icon: "mask" },
+            { id: 8, title: "Iron Man 3", year: "2012", phase: 2, desc: "Tony Stark deals with PTSD while facing the Mandarin.", icon: "fire" },
+            { id: 9, title: "Thor: The Dark World", year: "2013", phase: 2, desc: "Thor battles Malekith and the Dark Elves for the Aether.", icon: "gem" },
+            { id: 10, title: "Captain America: The Winter Soldier", year: "2014", phase: 2, desc: "Steve Rogers uncovers a conspiracy within S.H.I.E.L.D.", icon: "user-ninja" },
+            { id: 11, title: "Guardians of the Galaxy", year: "2014", phase: 2, desc: "Space outlaws form an unlikely alliance to save the galaxy.", icon: "shuttle-space" },
+            { id: 12, title: "Guardians of the Galaxy Vol. 2", year: "2014", phase: 2, desc: "Peter Quill discovers the truth about his biological father.", icon: "planet-moon" },
+            { id: 13, title: "Avengers: Age of Ultron", year: "2015", phase: 2, desc: "The team fights a rogue AI created by Tony Stark.", icon: "robot" },
+            { id: 14, title: "Ant-Man", year: "2015", phase: 2, desc: "Scott Lang masters the ability to shrink while keeping his strength.", icon: "bug" },
+            { id: 15, title: "Captain America: Civil War", year: "2016", phase: 3, desc: "The Avengers split into two factions over government oversight.", icon: "handcuffs" },
+            { id: 16, title: "Black Widow", year: "2016", phase: 4, desc: "Natasha Romanoff confronts the darker parts of her ledger.", icon: "spider" },
+            { id: 17, title: "Black Panther", year: "2016", phase: 3, desc: "T'Challa returns home to Wakanda to take the throne.", icon: "cat" },
+            { id: 18, title: "Spider-Man: Homecoming", year: "2016", phase: 3, desc: "Peter Parker tries to balance high school with being a hero.", icon: "spider" },
+            { id: 19, title: "Doctor Strange", year: "2016-2017", phase: 3, desc: "A neurosurgeon learns the mystic arts after a tragic accident.", icon: "wand-sparkles" },
+            { id: 20, title: "Thor: Ragnarok", year: "2017", phase: 3, desc: "Thor must escape Sakaar to save Asgard from Hela.", icon: "cloud-showers-heavy" },
+            { id: 21, title: "Ant-Man and the Wasp", year: "2018", phase: 3, desc: "Scott Lang and Hope van Dyne explore the Quantum Realm.", icon: "microscope" },
+            { id: 22, title: "Avengers: Infinity War", year: "2018", phase: 3, desc: "Thanos attempts to collect all Infinity Stones.", icon: "hand-fist" },
+            { id: 23, title: "Avengers: Endgame", year: "2018-2023", phase: 3, desc: "The surviving heroes attempt to undo Thanos' snap.", icon: "hourglass-end" },
+            { id: 24, title: "Spider-Man: Far From Home", year: "2024", phase: 3, desc: "Peter Parker goes on a school trip to Europe.", icon: "plane-departure" }
+        ];
+
+        const renderTimeline = () => {
+            const root = document.getElementById('timeline-root');
+            
+            mcuData.forEach((movie, index) => {
+                const isEven = index % 2 === 0;
+                
+                const item = document.createElement('div');
+                item.className = `timeline-item flex flex-col md:flex-row items-center w-full`;
+                
+                const cardHtml = `
+                    <div class="timeline-dot"></div>
+                    <div class="movie-card-container w-full md:w-1/2 ${isEven ? 'md:pr-12 text-right ml-0' : 'md:pl-12 text-left md:ml-auto'}">
+                        <div class="movie-card p-6 rounded-lg shadow-xl inline-block w-full max-w-md">
+                            <div class="flex items-center gap-3 mb-2 ${isEven ? 'justify-end' : 'justify-start'}">
+                                <span class="phase-badge">PHASE ${movie.phase}</span>
+                                <span class="text-marvel-red font-bold">${movie.year}</span>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-2 tracking-wide">${movie.title}</h3>
+                            <p class="text-gray-400 text-sm mb-4">${movie.desc}</p>
+                            <div class="text-gray-500">
+                                <i class="fa-solid fa-${movie.icon} text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                item.innerHTML = cardHtml;
+                root.appendChild(item);
+            });
+        };
+
+        // Scroll Animation Observer
+        const setupObserver = () => {
+            const options = {
+                threshold: 0.2
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, options);
+
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                observer.observe(item);
+            });
+        };
+
+        // Initialize
+        window.onload = () => {
+            renderTimeline();
+            setupObserver();
+        };
+    </script>
+</body>
+</html>
