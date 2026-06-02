@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+}
+
+/* NAV */
+.nav {
+  padding: 20px;
+  text-align: center;
+  background: #020617;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #6366f1, #22c55e);
+}
+
+.hero h2 {
+  font-size: 36px;
+}
+
+/* SECTIONS */
+.section {
+  padding: 40px 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.section h2 {
+  margin-bottom: 20px;
+}
+
+/* STEPS */
+.step {
+  background: #1e293b;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+}
+
+/* FEATURES */
+.features {
+  text-align: center;
+}
+
+.card {
+  background: #1e293b;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 10px;
+  display: inline-block;
+  width: 250px;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #020617;
+}
